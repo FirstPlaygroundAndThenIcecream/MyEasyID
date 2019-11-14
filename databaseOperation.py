@@ -19,11 +19,15 @@ def create_table(conn, create_table_sql):
     except Error as e:
         print(e)
 
-def insert_values(conn, data):
+def insert_values(data):
+    database = r"D:/sqlite/db/pythonsqlite.db"
+    conn = create_connection(database)
     sql = """ INSERT INTO users(name, email, balance)
         VALUES(?, ?, ?)"""
     cur = conn.cursor()
     cur.execute(sql, data)
+    conn.commit()
+    conn.close
     return cur.lastrowid
 
 def select_user_by_email(email):
@@ -35,7 +39,17 @@ def select_user_by_email(email):
     conn.close
     return user    
 
-# def main():
+def select_all_users():
+    database = r"D:/sqlite/db/pythonsqlite.db"
+    conn = create_connection(database)
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users")
+    users = cur.fetchall()
+    conn.close
+    return users    
+
+
+#def main():
 #     database = r"D:/sqlite/db/pythonsqlite.db"
 #     conn = create_connection(database)
 
@@ -52,10 +66,10 @@ def select_user_by_email(email):
     #     print("Error! Can not create the database connection...")
 
     # with conn:
-    #     user_1_data = ('a', 'a@a.com', 20)
+    #     user_1_data = ('c', 'c@c.com', 50)
     #     user_2_data = ('b', 'b@b.com', -5)
 
-    #     insert_values(conn, user_1_data)
+    #     insert_values(user_1_data)
     #     insert_values(conn, user_2_data)
 
     # with conn:

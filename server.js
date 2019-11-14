@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken')
 fs.createReadStream('users.csv')
     .pipe(csv())
     .on('data', (data) => user_array.push(data))
-    .on('end', () =>{
+    .on('end', () => {
         console.log(user_array);
     })
 

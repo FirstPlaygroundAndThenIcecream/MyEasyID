@@ -1,6 +1,7 @@
 from bottle import get, post, request, run, template # or route
 import databaseOperation
 import jwt
+import getForm
 
 def check_login(user_email):
     user = databaseOperation.select_user_by_email(user_email)
@@ -51,14 +52,15 @@ def print_all_users():
 
 @get('/login') # or @route('/login')
 def login():
-    user = databaseOperation.select_user_by_email('a@a.com')
-    print(user[1], user[2])
+    # user = databaseOperation.select_user_by_email('a@a.com')
+    # print(user[1], user[2])
     return '''
         <form action="/login" method="POST">
             Email: <input email="email" type="text" />
             Password: <input password="password" type="password" />
             <input value="Login" type="submit" />
         </form>'''
+
 
 #password has no use here, bc it is not in sqlite database, therefore 
 #this route will give you user information asa the email adress is founded
@@ -95,6 +97,12 @@ def check_token():
             return template("User {{thisUser}} has balance {{balance}}.", thisUser=username, balance=user[2])
     else:
         return "<p>sorry, can't find your information</p>"
-    
 
+@get('/get-form') # or @route('/login')
+def getFormContent():
+    return '''
+    <h1> SKAT </h1><br>
+    <iframe src="https://w3certified.com/easyid/easyid-form.php" width="853" height="480" frameborder="0" allowfullscreen>
+    </iframe>
+    '''
 run(host='localhost', port=8000)

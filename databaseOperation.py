@@ -49,21 +49,21 @@ def select_all_users():
     return users    
 
 
-#def main():
-#     database = r"D:/sqlite/db/pythonsqlite.db"
-#     conn = create_connection(database)
+def main():
+    database = r"D:/sqlite/db/pythonsqlite.db"
+    conn = create_connection(database)
 
-    # sql_create_users_table = """ CREATE TABLE IF NOT EXISTS users(
-    #     name text NOT NULL,
-    #     email text NOT NULL,
-    #     balance integer
-    # );"""
+    sql_create_users_table = """ CREATE TABLE IF NOT EXISTS users(
+        name text NOT NULL,
+        email text NOT NULL,
+        balance integer
+    );"""
 
-    # if conn is not None:
-    #     create_table(conn, sql_create_users_table)
-    #     print('created table')
-    # else:
-    #     print("Error! Can not create the database connection...")
+    if conn is not None:
+        create_table(conn, sql_create_users_table)
+        print('created table')
+    else:
+        print("Error! Can not create the database connection...")
 
     # with conn:
     #     user_1_data = ('c', 'c@c.com', 50)
@@ -75,5 +75,5 @@ def select_all_users():
     # with conn:
     #     select_user_by_email(conn, "b@b.com")
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()

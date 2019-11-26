@@ -1,7 +1,8 @@
-from bottle import get, post, request, run, template # or route
+from bottle import get, post, request, run, template, static_file # or route
 import databaseOperation
 import jwt
 import getForm
+
 
 def check_login(user_email):
     user = databaseOperation.select_user_by_email(user_email)
@@ -98,11 +99,15 @@ def check_token():
     else:
         return "<p>sorry, can't find your information</p>"
 
+# https://w3certified.com/easyid/easyid-form.php
+# http://80.210.70.4:3333/easyid-form.php
 @get('/get-form') # or @route('/login')
 def getFormContent():
-    return '''
-    <h1> SKAT </h1><br>
-    <iframe src="https://w3certified.com/easyid/easyid-form.php" width="853" height="480" frameborder="0" allowfullscreen>
-    </iframe>
-    '''
+    return static_file("loginForm.html", root="./htmlPages/")
+     
+
+@get('/test-js')
+def testJs():
+    return static_file("testHtml.html", root="./htmlPages/")
+
 run(host='localhost', port=8000)

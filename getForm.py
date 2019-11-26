@@ -6,5 +6,8 @@ def getContent():
     r = requests.get(URL)
 
     soup = BeautifulSoup(r.content, "html5lib")
-    
-    return (soup.prettify())
+    # print(soup.prettify())
+
+    # return (soup.prettify())
+
+getContent()

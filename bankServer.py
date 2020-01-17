@@ -1,4 +1,4 @@
-from bottle import get, post, request, run, template, static_file # or route
+from bottle import get, post, request, run, template, static_file, error # or route
 import databaseOperation
 import jwt
 import getForm
@@ -103,11 +103,53 @@ def check_token():
 # http://80.210.70.4:3333/easyid-form.php
 @get('/get-form') # or @route('/login')
 def getFormContent():
-    return static_file("loginForm.html", root="./htmlPages/")
-     
+    return static_file("loginForm.html", root="./static", mimetype='text/html')
+    # return '''
+    # <body>
+    # <h1 id="demo"> SKAT </h1><br>
+    # <iframe src="http://80.210.70.4:3333/easyid-form.php" width="300" height="350" frameborder="0" allowfullscreen>
+    # </iframe>
+    # <p id="customerMsg"></p>
+    # </body>
+
+    # <script>
+    #     if (window.addEventListener) {
+    #         window.addEventListener("message", onMessage, false);        
+    #     } 
+    #     else if (window.attachEvent) {
+    #         window.attachEvent("onmessage", onMessage, false);
+    #     }
+
+    #     function onMessage(event) {
+    #         // Check sender origin to be trusted
+    #         if (event.origin !== "http://80.210.70.4:3333") return;
+
+    #         var data = event.data;
+
+    #         if (typeof(window[data.func]) == "function") {
+    #             window[data.func].call(null, data.message);
+    #         }
+    #     }
+
+    #     // Function to be called from iframe
+    #     function parentFunc(message) {
+    #         alert(message);
+    #         loadDoc(message);
+    #     }
+
+    #     function loadDoc(message) {
+    #         document.getElementById("customerMsg").innerHTML = message;
+    #     }
+
+    # </script>
+    # '''
 
 @get('/test-js')
 def testJs():
-    return static_file("testHtml.html", root="./htmlPages/")
+    return static_file("testHtml.html", root="./static")
+
+@error(403)
+def mistake(code):
+    return 'The parameter you passed has the wrong format!'
 
 run(host='localhost', port=8000)

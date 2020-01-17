@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
     <title>Log in</title>
 </head>
 <body>
+        <!-- http://80.210.70.4:3333/easyid-form.php -->
     <h1 id="demo"> SKAT </h1><br>
     <iframe src="http://80.210.70.4:3333/easyid-form.php" width="300" height="350" frameborder="0" allowfullscreen>
     </iframe>
@@ -15,7 +16,6 @@
 </body>
 
 <script>
-    document.getElementById("demo").innerHTML = "Hello Skat!";
     if (window.addEventListener) {
         window.addEventListener("message", onMessage, false);        
     } 
@@ -36,12 +36,20 @@
 
     // Function to be called from iframe
     function parentFunc(message) {
-        alert(message);
-        loadDoc(message);
+        // alert(message);
+        // loadDoc(message);
+        console.log("parentFunc: " + message)
+        return message;
     }
 
     function loadDoc(message) {
         document.getElementById("customerMsg").innerHTML = message;
+    }
+
+    function printToken(message){
+        token = parentFunc(message);
+        loadDoc(token);
+        console.log("printToken" + message)
     }
 
 </script>

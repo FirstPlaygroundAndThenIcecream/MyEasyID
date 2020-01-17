@@ -8,6 +8,6 @@ def getContent():
     soup = BeautifulSoup(r.content, "html5lib")
     # print(soup.prettify())
 
-    # return (soup.prettify())
+    return (soup.prettify())
 
-getContent()
+# getContent()

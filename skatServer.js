@@ -7,7 +7,7 @@ const user_array = []
 
 const jwt = require('jsonwebtoken')
 
-app.use(express.static('./htmlPages'))
+app.use(express.static('./static'))
 
 fs.createReadStream('users.csv')
     .pipe(csv())
@@ -26,10 +26,13 @@ app.get('/', function(req, res){
     res.send("Hello ID");
 })
 
-app.get('/map', function(req, res){
-    res.sendFile(__dirname + '/htmlPages/worldMap.html');
+app.get('/login-form', function(req, res){
+    res.sendFile(__dirname + '/html/loginForm.html');
 })
 
+app.get('/get-user-taxes', function(req, res){
+
+})
 
 app.post('/login/:email/:password', function(req, res){
     let user_email = req.params.email;

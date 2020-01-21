@@ -1,25 +1,42 @@
 from bottle import get, post, request, run, template, static_file, error # or route
 import databaseOperation
 import jwt
-import getForm
 
-
-def check_login(user_email):
-    user = databaseOperation.select_user_by_email(user_email)
+def check_login(userEmail):
+    user = databaseOperation.select_user_by_email(userEmail)
+    print('check_login')
+    print(user)
     if user == None:
-        print("check None")
-        return user
-    if user_email == user[1]:
-        print("check True")
+        return None
+    if userEmail == user[1]:
         return user
 
-def validateToken(token):
-    signature = 'secret'
+def validateToken(token, signature):
     try:
-        decoded_token = jwt.decode(token, signature)
-        return True
+        decodedToken = jwt.decode(token, signature)
+        return True, decodedToken
     except (jwt.InvalidSignatureError, jwt.exceptions.DecodeError):
         return False
+
+@get('/get-form') # or @route('/login')
+def getFormContent():
+    return static_file("loginForm.html", root="./html", mimetype='text/html')
+
+@get('/get-user-balance')
+def decodeAndSeachDB():
+    token = request.query.token
+    signature = 'example_key'
+    result, decodedToken = validateToken(token, signature)
+    if result:       
+        userEmail = decodedToken['email']
+        user = databaseOperation.select_user_by_email(userEmail)
+        if user == None:
+            return 'Sorry, can not find the user'
+        else:
+            balance = user[2]           ###########################  make this json or xml  #######################
+            return 'Hello, your balance is ' + str(balance) 
+    else:
+        return 'Sorry, you have no right to continue'
 
 @get('/register') # or @route('/login')
 def register():
@@ -51,25 +68,24 @@ def print_all_users():
     users = databaseOperation.select_all_users()
     return template("users are {{users_data}}", users_data=users)
 
+
 @get('/login') # or @route('/login')
 def login():
-    # user = databaseOperation.select_user_by_email('a@a.com')
-    # print(user[1], user[2])
     return '''
         <form action="/login" method="POST">
-            Email: <input email="email" type="text" />
-            Password: <input password="password" type="password" />
-            <input value="Login" type="submit" />
+            Email: <input name="email" type="text" />
+            Password: <input name="password" type="password" />
+           <input value="Login" type="submit" />
         </form>'''
 
 
-#password has no use here, bc it is not in sqlite database, therefore 
-#this route will give you user information asa the email adress is founded
+#should fix: do_login doesn't work if the password field is taken away
 @post('/login') # or @route('/login', method='POST')
 def do_login():
     email = request.forms.get("email")
-    password = request.forms.get("password")
+    print(email)
     user = check_login(email)
+    print(user)
     if user != None:
         print(user)
         return template('Your information: {{user_data}}', user_data=user)
@@ -77,79 +93,14 @@ def do_login():
     else:
         return "<p>Login failed.</p>"
 
-@get('/get-user-balance') # or @route('/login')
-def send_token():
-    return '''
-        <form action="/get-user-balance" method="POST">
-            username: <input name="username" type="text" />
-            token: <input name="token" type="text" />
-            <input value="send" type="submit" />
-        </form>'''
-
-@post('/get-user-balance')
-def check_token():
-    username = request.forms.get("username")
-    token = request.forms.get("token")
-    if validateToken(token) == True:
-        user = databaseOperation.select_user_by_email(username)
-        if user == None:
-            return template("User {{thisUser}} is not found.", thisUser=username)
-        else:
-            return template("User {{thisUser}} has balance {{balance}}.", thisUser=username, balance=user[2])
-    else:
-        return "<p>sorry, can't find your information</p>"
-
-# https://w3certified.com/easyid/easyid-form.php
-# http://80.210.70.4:3333/easyid-form.php
-@get('/get-form') # or @route('/login')
-def getFormContent():
-    return static_file("loginForm.html", root="./static", mimetype='text/html')
-    # return '''
-    # <body>
-    # <h1 id="demo"> SKAT </h1><br>
-    # <iframe src="http://80.210.70.4:3333/easyid-form.php" width="300" height="350" frameborder="0" allowfullscreen>
-    # </iframe>
-    # <p id="customerMsg"></p>
-    # </body>
-
-    # <script>
-    #     if (window.addEventListener) {
-    #         window.addEventListener("message", onMessage, false);        
-    #     } 
-    #     else if (window.attachEvent) {
-    #         window.attachEvent("onmessage", onMessage, false);
-    #     }
-
-    #     function onMessage(event) {
-    #         // Check sender origin to be trusted
-    #         if (event.origin !== "http://80.210.70.4:3333") return;
-
-    #         var data = event.data;
-
-    #         if (typeof(window[data.func]) == "function") {
-    #             window[data.func].call(null, data.message);
-    #         }
-    #     }
-
-    #     // Function to be called from iframe
-    #     function parentFunc(message) {
-    #         alert(message);
-    #         loadDoc(message);
-    #     }
-
-    #     function loadDoc(message) {
-    #         document.getElementById("customerMsg").innerHTML = message;
-    #     }
-
-    # </script>
-    # '''
-
-@get('/test-js')
-def testJs():
-    return static_file("testHtml.html", root="./static")
 
 @error(403)
-def mistake(code):
+def mistake_403(code):
     return 'The parameter you passed has the wrong format!'
+
+@error(404)
+def mistake_404(code):
+    return "Can't find the page you are looking for, sorry!"
+
 
 run(host='localhost', port=8000)

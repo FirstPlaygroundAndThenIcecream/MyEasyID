@@ -1,0 +1,24 @@
+xml
+
+-<person>
+    <first>John</first>
+    <last>Johnsen</last>
+    <country>Denmark</country>
+</person>
+
+-------------------------------------------------------
+
+json
+
+{
+    first: "John",
+    last: "Johnsen"
+    country: "Denmark"
+}
+
+-------------------------------------------------------
+
+CSV
+
+first,last,country
+John,Johnsen,Denmark

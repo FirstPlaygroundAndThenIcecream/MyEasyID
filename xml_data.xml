@@ -1,0 +1,29 @@
+<!-- <all>
+    <person>
+        <first> John </first>
+        <last> Johnsen </last>
+        <country> Denmark </country>
+    </person>
+    <person>
+        <first> Peter </first>
+        <last> Petersen </last>
+        <country> Norway </country>
+    </person>
+</all> -->
+
+<all>
+    <person register='2000' title='student'>
+        <name>
+            <first>John</first>
+            <last>Johnsen</last>
+        </name>
+        <country>Denmark</country>
+    </person>
+        <person register='2000' title='teacher'>
+        <name>
+            <first>Peter</first>
+            <last>Petersen</last>
+        </name>
+        <country>Norway</country>
+    </person>
+</all>

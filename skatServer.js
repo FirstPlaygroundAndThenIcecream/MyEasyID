@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 
+const mongoOperation = require('./mongodb')
+
 const csv = require('csv-parser')
 const fs = require('fs')
 const user_array = []
@@ -22,17 +24,30 @@ fs.createReadStream('users.csv')
 //         console.log(`First headers: ${headers[0]}`)
 //     })
 
-app.get('/', function(req, res){
-    res.send("Hello ID");
-})
-
 app.get('/login-form', function(req, res){
-    res.sendFile(__dirname + '/html/loginForm.html');
+    res.sendFile(__dirname + '/html/loginForm-skat.html');
 })
 
 app.get('/get-user-taxes', function(req, res){
-
+    let token = req.query.token;
+    let secret = 'example_key'
+    try{
+        let decoded_token = jwt.verify(token, secret)
+        let userEmail = {"email": decoded_token["email"]}
+        mongoOperation.findUserByEmil(userEmail, function(foundUser){
+            let msg = {
+                name: foundUser.name, //decoded_token["name"] is decoding directly from the token, user b@b.com has name A in the token
+                email: decoded_token["email"],
+                tax: foundUser.taxes
+            }
+            console.log(msg)
+            res.status(200).send (msg)
+        })        
+    } catch(err){
+        res.send("Sorry, something is wrong.")
+    }
 })
+
 
 app.post('/login/:email/:password', function(req, res){
     let user_email = req.params.email;

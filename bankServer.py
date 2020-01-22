@@ -20,7 +20,7 @@ def validateToken(token, signature):
 
 @get('/get-form') # or @route('/login')
 def getFormContent():
-    return static_file("loginForm.html", root="./html", mimetype='text/html')
+    return static_file("loginForm-bank.html", root="./html", mimetype='text/html')
 
 @get('/get-user-balance')
 def decodeAndSeachDB():

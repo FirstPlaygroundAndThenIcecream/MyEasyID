@@ -6,7 +6,7 @@ let path = "mongodb://localhost:27017";
 const dbName = "node1"
 const collectionName = "skat"
 
-// // //make connection to the server
+// //make connection to the server
 // MongoClient.connect(path, ({useNewUrlParser: true, useUnifiedTopology: true}), function(err, client){
 //     if (err) console.log("sorry, something is wrong...")
 //     console.log("Connected to the server at 27017...")
@@ -14,7 +14,7 @@ const collectionName = "skat"
 //     client.close()
 // })
 
-// // //create a new collection which is called 'skat'
+// //create a new collection which is called 'skat'
 // MongoClient.connect(path, ({useNewUrlParser: true, useUnifiedTopology: true}), function(err, db) {
 //     if (err) throw err;
 //     let dbo = db.db(dbName);
@@ -25,14 +25,14 @@ const collectionName = "skat"
 //     });
 // }); 
 
-// // //insert one doc which contains one user info
+// //insert one doc which contains one user info
 // MongoClient.connect(path, ({useNewUrlParser: true, useUnifiedTopology: true}), function(err, db){
 //     if(err) throw err;
 //     let dbo = db.db(dbName);
 //     let user_info = {
-//         name: "b", 
-//         email: "b@b.com",
-//         taxes: 200
+//         name: "a", 
+//         email: "a@a.com",
+//         taxes: 300
 //     };
 //     dbo.collection(collectionName).insertOne(user_info, function(err, res){
 //         if (err) throw err;

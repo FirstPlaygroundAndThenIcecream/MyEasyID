@@ -1,0 +1,18 @@
+{
+    "person": [
+        {
+            "first_name": "John",
+            "last_name": "Johnsen",
+            "country": "Denmark",
+            "@register_year": "2000",
+            "@title": "student"
+        },
+        {
+            "first_name": "Peter",
+            "last_name": "Petersen",
+            "country": "Norway",
+            "@register_year": "2000",
+            "@title": "teacher"
+        }
+    ]
+}

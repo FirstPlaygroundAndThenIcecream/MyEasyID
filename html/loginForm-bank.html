@@ -14,7 +14,8 @@
     <div id='bankMsg'></div>        
 </body>
 
-<script>
+<script> 
+
     if (window.addEventListener) {
         window.addEventListener("message", onMessage, false);        
     } 
@@ -27,9 +28,6 @@
         if (event.origin !== "http://80.210.70.4:3333") return;
 
         var data = event.data;                                         // data is object contains parentFunc name and the message(token)
-        console.log("**event.data")
-        console.log(data)
-        console.log("--event.data")
         if (typeof(window[data.func]) == "function") {
             window[data.func].call(null, data.message);                // same as window['parentFunc'].call(null, data.message)
         }
@@ -44,21 +42,24 @@
     }
 
     //send get request with token as param to bank server
-    function makeRequest(message) {
+    function makeRequest_bank(message) {
+        var parser, xmlDoc;
         var xhttp = new XMLHttpRequest();
         var url = "http://localhost:8000/get-user-balance?token=";
         var params = message;
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("bankMsg").innerHTML = this.responseText;
+                console.log(this.responseText);
+                parser = new DOMParser();
+                xmlDoc = parser.parseFromString(this.responseText, 'text/xml')
+                userName = xmlDoc.getElementsByTagName('name')[0].childNodes[0].nodeValue;
+                userBalance = xmlDoc.getElementsByTagName('balance')[0].childNodes[0].nodeValue;
+                userMsg = "Hi " + userName + ", your balance is " + userBalance;
+                document.getElementById("bankMsg").innerHTML = userMsg;
             }
         };
         xhttp.open("GET", url+params, false);
         xhttp.send();
-    }
-
-    function loadDoc(message) {
-        document.getElementById("token").innerHTML = message;
     }
 
 </script>

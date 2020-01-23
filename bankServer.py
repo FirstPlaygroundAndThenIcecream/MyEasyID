@@ -33,8 +33,16 @@ def decodeAndSeachDB():
         if user == None:
             return 'Sorry, can not find the user'
         else:
-            balance = user[2]           ###########################  make this json or xml  #######################
-            return 'Hello, your balance is ' + str(balance) 
+            balance = user[2]           
+            msg_str = '<?xml version="1.0" encoding="UTF-8"?><bankInfo><name>%s</name><balance>%s</balance></bankInfo>'%(user[0], user[2])
+            # msg = '''
+            #     <?xml version="1.0" encoding="UTF-8"?>
+            #     <bankInfo>
+            #         <name>%s</name>
+            #         <balance>%s</balance>
+            #     </bankInfo>
+            # '''%(user[0], user[2])
+            return msg_str 
     else:
         return 'Sorry, you have no right to continue'
 

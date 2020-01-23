@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 
-const mongoOperation = require('./mongodb')
+const mongoOperation = require('./mongodbOperation')
 
 const csv = require('csv-parser')
 const fs = require('fs')
@@ -11,22 +11,11 @@ const jwt = require('jsonwebtoken')
 
 app.use(express.static('./static'))
 
-fs.createReadStream('users.csv')
-    .pipe(csv())
-    .on('data', (data) => user_array.push(data))
-    .on('end', () => {
-        console.log(user_array);
-    })
-
-// fs.createReadStream('users.csv')
-//     .pipe(csv())
-//     .on('headers', (headers) =>{
-//         console.log(`First headers: ${headers[0]}`)
-//     })
 
 app.get('/login-form', function(req, res){
     res.sendFile(__dirname + '/html/loginForm-skat.html');
 })
+
 
 app.get('/get-user-taxes', function(req, res){
     let token = req.query.token;
@@ -41,12 +30,27 @@ app.get('/get-user-taxes', function(req, res){
                 tax: foundUser.taxes
             }
             console.log(msg)
-            res.status(200).send (msg)
+            res.status(200).send(msg)
         })        
     } catch(err){
         res.send("Sorry, something is wrong.")
     }
 })
+
+
+fs.createReadStream('users.csv')
+    .pipe(csv())
+    .on('data', (data) => user_array.push(data))
+    .on('end', () => {
+        console.log(user_array);
+    })
+
+
+// fs.createReadStream('users.csv')
+//     .pipe(csv())
+//     .on('headers', (headers) =>{
+//         console.log(`First headers: ${headers[0]}`)
+//     })
 
 
 app.post('/login/:email/:password', function(req, res){
@@ -58,6 +62,7 @@ app.post('/login/:email/:password', function(req, res){
     }, 'secret');
     res.status(200).send(token);
 })
+
 
 app.listen('80', function(err){
     if(err){

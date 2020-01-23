@@ -2,40 +2,21 @@ import xmltodict, json, pprint, csv, sys
 from json2xml import json2xml, readfromurl, readfromstring, readfromjson
 import xml.etree.ElementTree as ET
 
-person_xml_str = '<person> <first>John</first> <last>Johnsen</last> <country>Denmark</country> </person>'
-
-person_json_dict ={'all': 
-                    {'person': 
-                        [{'@register': '2000', '@title': 'student', 
-                            'name': 
-                            {
-                                'first': 'John', 
-                                'last': 'Johnsen'
-                            }, 
-                            'country': 'Denmark'
-                            }, 
-                            {'@register': '2000', '@title': 'teacher', 
-                            'name': 
-                            {
-                                'first': 'Peter', 
-                                'last': 'Petersen'
-                            }, 
-                            'country': 'Norway'
-                        }]
-                    }
-                }
-
-# # xml to json, csv
+########################################
+##          xml to json, csv          ##
+########################################
 
 # xml to json 
 def xml_2_json(fileName):
-  with open(fileName) as fd:
-    person_orderedDict = xmltodict.parse(fd.read())
-  # person_orderedDict = xmltodict.parse(person_xml)             # here can parse a xml str 
-  person_str = json.dumps(person_orderedDict)                    # change from orderedDict to str, as it is a format the loads method can accept
-  print(person_str)
-  person_json = json.loads(person_str)
+  with open(fileName) as f:
+    person_orderedDict = xmltodict.parse(f.read())                # here can parse a xml str 
+  person_json = json.dumps(person_orderedDict)                    # change from orderedDict to str, as it is a format the loads method can accept
+  # person_dict = json.loads(person_json)
   return person_json
+
+xml_file = 'xml_data.xml'
+print(xml_2_json(xml_file))
+
 
 # xml to csv
 def xml_2_csv(fileName):
@@ -73,16 +54,27 @@ def xml_2_csv(fileName):
     print('row: ' + str(row))
 
   f.close()
-   
-#####################################################################
 
-# # json to xml
+# xml_2_csv(xml_file)
+
+
+
+########################################
+##          json to xml, csv          ##
+########################################
 
 # json to xml, get data from a str
 def json_2_xml_str(dataStr):
-  data = readfromstring(dataStr)
-  data_xml = json2xml.Json2xml(data).to_xml()
-  print(data_xml)
+  try:
+    data = readfromstring(dataStr)
+    data_xml = json2xml.Json2xml(data).to_xml()
+    print(data_xml)
+  except:
+   print("an error occured")
+
+# json_str = '{"first": "John", "last": "Johnsen", "country": "Denmark"}'
+# json_2_xml_str(json_str)
+
 
 # json to xml, get data from a url
 def json_2_xml_url(url):
@@ -90,11 +82,19 @@ def json_2_xml_url(url):
   data_fromUrl_xml = json2xml.Json2xml(data_fromUrl).to_xml()
   print(data_fromUrl_xml)
 
+# json_url = "http://127.0.0.1:5000/test-JSON-print"
+# json_2_xml_url(json_url)
+
+
 # json to xml, get data from json file
 def json_2_xml_jsonfile(jsonFileName):
   data_txt = readfromjson(jsonFileName)
   data_txt_xml = json2xml.Json2xml(data_txt).to_xml()
   print(data_txt_xml)
+
+# json_file = "./JSON_data.json"
+# json_2_xml_jsonfile(json_file)
+
 
 # json to csv
 def json_2_csv():
@@ -121,21 +121,58 @@ def json_2_csv():
   
   csv_file.close()
 
+#json_2_csv()
 
 
-#####################################################################
 
-# xml_file = 'xml_data.xml'
-# xml_2_csv(xml_file)
-# print(xml_2_json(xml_file))
+########################################
+##          csv to json, xml          ##
+########################################
 
-# json_str = '{"first": "John", "last": "Johnsen", "country": "Denmark"}'
-# json_2_xml_str(json_str)
 
-# json_url = "http://127.0.0.1:5000/test-JSON-print"
-# json_2_xml_url(json_url)
+# csv to json
+def csv_2_json():
+  csvFilePath = 'xml2csv.csv'
+  jsonFilePath = 'csv_2_json.json'
 
-# json_file = "./JSON_data.json"
-# json_2_xml_jsonfile(json_file)
+  data = {}
+  with open(csvFilePath) as csvFile:
+    csvReader = csv.DictReader(csvFile)
+    for row in csvReader:    #row is orderedDict
+      data.setdefault('person', [])
+      data['person'].append(row)
+    print(json.dumps(data, indent=4))
+  
+  with open(jsonFilePath, 'a', newline='\n') as jsonFile:
+    jsonFile.write(json.dumps(data, indent=4))
 
-json_2_csv()
+# csv_2_json()
+
+
+# csv to xml
+def csv_2_xml():
+  csvFilePath = 'xml2csv.csv'
+  xmlFilePath = 'csv_2_xml.xml'
+
+  data = []
+  with open(csvFilePath) as csvFile:
+    csvReader = csv.DictReader(csvFile)
+    for row in csvReader:    #row is orderedDict
+      data.append(row)
+  print(len(data))
+  for i in range(0, 2):
+    print(data[i])
+  # print(data[0])
+
+  with open(xmlFilePath, 'w+', newline='\n') as xmlWriter:
+    xmlWriter.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    xmlWriter.write('<all>\n')
+    for i in range(0, len(data)):
+      xmlWriter.write('   ' + '<person register="' + data[i]['@register_year'] + '" title="' + data[i]['@title'] + '">\n')
+      xmlWriter.write('       ' + '<first_name>' + data[i]['first_name'] + '</first_name>\n')
+      xmlWriter.write('       ' + '<last_name>' + data[i]['last_name'] + '</last_name>\n')
+      xmlWriter.write('       ' + '<country>' + data[i]['country'] + '</country>\n')
+      xmlWriter.write('   ' + '</person>\n')
+    xmlWriter.write('</all>\n')
+
+# csv_2_xml()

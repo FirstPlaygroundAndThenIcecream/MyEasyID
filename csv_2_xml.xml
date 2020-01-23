@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<all>
+   <person register="2000" title="student">
+       <first_name>John</first_name>
+       <last_name>Johnsen</last_name>
+       <country>Denmark</country>
+   </person>
+   <person register="2000" title="teacher">
+       <first_name>Peter</first_name>
+       <last_name>Petersen</last_name>
+       <country>Norway</country>
+   </person>
+</all>

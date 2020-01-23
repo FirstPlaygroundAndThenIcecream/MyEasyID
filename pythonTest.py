@@ -30,5 +30,5 @@ person_json_str ={'all':
 
 # print(thisDict["attributes"]["register"][0])
 
-print(person_json_str['all']['person'][0])
-print(person_json_str['all']['person'][1])
+# print(person_json_str['all']['person'][0])
+# print(person_json_str['all']['person'][1])

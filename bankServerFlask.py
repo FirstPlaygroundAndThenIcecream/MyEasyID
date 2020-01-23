@@ -51,7 +51,29 @@ loaded_y = json.loads(y)
 
 @app.route('/test-JSON-print')
 def testJS0N():
-    return loaded_y
+    return '''{"all": 
+                {"person": 
+                    [{
+                        "@register": "2000", 
+                        "@title": "student", 
+                        "name": 
+                        {
+                            "first": "John", 
+                            "last": "Johnsen"
+                        }, 
+                        "country": "Denmark"
+                    }, {
+                        "@register": "2000", 
+                        "@title": "teacher", 
+                        "name": 
+                        {
+                            "first": "Peter", 
+                            "last": "Petersen"
+                            }, 
+                        "country": "Norway"
+                    }]
+                }
+            }'''
 
 
 

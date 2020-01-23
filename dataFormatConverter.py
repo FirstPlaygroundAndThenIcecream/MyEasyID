@@ -98,14 +98,30 @@ def json_2_xml_jsonfile(jsonFileName):
 
 # json to csv
 def json_2_csv():
-  fileInput = sys.argv[1]
-  fileOutput = sys.argv[2]    
+  with open('JSON_data.json') as json_file:
+    data = json.load(json_file)
+
+    data_person = data['all']['person']
+    print(data_person)
+
+  csv_file = open('json_2_csv.txt', 'w+', newline='\n')
+  csvWriter = csv.writer(csv_file)
+
+  header = ['@register', '@title', 'firstName', 'lastName', 'Country']
+  csvWriter.writerow(header)
+
+  for person in data_person:
+    row = []
+    row.append(person['@register'])
+    row.append(person['@title'])
+    row.append(person['name']['first'])
+    row.append(person['name']['last'])
+    row.append(person['country'])
+    csvWriter.writerow(row)
   
-  inputFile = open(fileInput) #open json file
-  outputFile = open(fileOutput, 'w') #load csv file
-  data = json.load(inputFile) #load json content
-  inputFile.close() #close the input file    output = csv.writer(outputFile) #create a csv.write    output.writerow(data[0].keys())  # header row    for row in data:
-  output.writerow(row.values()) #values row
+  csv_file.close()
+
+
 
 #####################################################################
 
@@ -119,5 +135,7 @@ def json_2_csv():
 # json_url = "http://127.0.0.1:5000/test-JSON-print"
 # json_2_xml_url(json_url)
 
-json_file = "./JSON_data.json"
-json_2_xml_jsonfile(json_file)
+# json_file = "./JSON_data.json"
+# json_2_xml_jsonfile(json_file)
+
+json_2_csv()

@@ -1,0 +1,3 @@
+@register,@title,firstName,lastName,Country
+2000,student,John,Johnsen,Denmark
+2000,teacher,Peter,Petersen,Norway
